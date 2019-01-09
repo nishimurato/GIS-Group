@@ -2789,11 +2789,6 @@ rt
 </head>
 
 <body>
-   <script>
-     var hash=location.hash.split(",");
-     var map = L.map("map").setView([hash[1],hash[2]],hash[0].substr(1));
-     L.tileLayer("http://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png").addTo(map);
-   </script>
 
 <!--[if !excel]>　　<![endif]-->
 <!--次の情報は、Excel の Web ページとして発行ウィザードで生成されました。-->
@@ -11210,6 +11205,11 @@ YWdlMS5qcGVnUEsFBgAAAAAGAAYAhQEAACKQAAAAAA==
 
 </div>
 
+   <script>
+     var hash=location.hash.split(",");
+     var map = L.map("map").setView([hash[1],hash[2]],hash[0].substr(1));
+     L.tileLayer("http://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png").addTo(map);
+   </script>
 
 <!----------------------------->
 <!--Excel の Web ページとして発行 ウィザードのアウトプットの終わり-->
