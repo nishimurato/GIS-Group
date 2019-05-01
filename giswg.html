@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset='utf-8' />
+  <title>tankenMap</title>
+  <link href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+  <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+ </head>
+ <body>
+  <iframe id="frm" width="1104" height="800" src="https://maps.gsi.go.jp/?hc=hifc#10/35.787184/139.809265/&base=std&ls=std&disp=1&vs=c1j1h0k0l0u0t0z0r0s0m0f1" style="position:absolute;top:10px;left:10px;"></iframe>
+  <img width=1800 height=1200 src="tankenMap.files/p1.png">
+  <img width=1797 height=1200 src="tankenMap.files/p2.png" style="position:relative;top:-11px;">
+  <button id="name" style="position:absolute;top:12px;left:1199px;font-size:32px;background-color:orange;">名称</button>
+  <div id="attmenu" style="visibility:hidden;top:18px;left:450px;position:absolute;">
+   <div style="background:orange;padding:3px 4px 1px;">
+    <select id="pref" onchange="prefchange()" style="font-size:22px;">
+     <option value="" >(都道府県)</option>
+     <option value="01">北海道</option><option value="02">青森県</option><option value="03">岩手県</option><option value="04">宮城県</option><option value="05">秋田県</option>
+     <option value="06">山形県</option><option value="07">福島県</option><option value="08">茨城県</option><option value="09">栃木県</option><option value="10">群馬県</option>
+     <option value="11">埼玉県</option><option value="12">千葉県</option><option value="13">東京都</option><option value="14">神奈川県</option><option value="15">新潟県</option>
+     <option value="16">富山県</option><option value="17">石川県</option><option value="18">福井県</option><option value="19">山梨県</option><option value="20">長野県</option>
+     <option value="21">岐阜県</option><option value="22">静岡県</option><option value="23">愛知県</option><option value="24">三重県</option><option value="25">滋賀県</option>
+     <option value="26">京都府</option><option value="27">大阪府</option><option value="28">兵庫県</option><option value="29">奈良県</option><option value="30">和歌山県</option>
+     <option value="31">鳥取県</option><option value="32">島根県</option><option value="33">岡山県</option><option value="34">広島県</option><option value="35">山口県</option>
+     <option value="36">徳島県</option><option value="37">香川県</option><option value="38">愛媛県</option><option value="39">高知県</option><option value="40">福岡県</option>
+     <option value="41">佐賀県</option><option value="42">長崎県</option><option value="43">熊本県</option><option value="44">大分県</option><option value="45">宮崎県</option>
+     <option value="46">鹿児島県</option><option value="47">沖縄県</option>
+    </select>
+    <select id="gakk" onchange="gakkochange()" style="font-size:22px;"><option value="">(学校名称)</option></select>
+   </div>
+  </div>
+
+  <script>
+   var gakkodb=0;
+   document.getElementById("name").addEventListener('click', function(e){
+     document.getElementById('attmenu').style.visibility="visible";
+     $.get('xyz/gakko.geojson').done(function(data){gakkodb=data});
+   });
+        
+   function prefchange(){
+     var sel=[],nn=[];
+     for(var i in gakkodb.features){
+       if(gakkodb.features[i].properties.P29_001.indexOf($('#pref').val())==0){
+         sel.push(gakkodb.features[i].properties); nn.push(i);
+       }
+     }
+     var gk = document.getElementById("gakk");
+     while (gk.childNodes.length > 1) {gk.removeChild(gk.lastChild)};
+     for(var i=0; i<sel.length; i++){
+       var op = document.createElement('option');
+       op.innerText=sel[i].P29_005;
+       op.value=nn[i];
+       gk.appendChild(op);
+     }
+   }
+   function gakkochange(){
+     var lat=gakkodb.features[$('#gakk').val()].geometry.coordinates[1];
+     var lot=gakkodb.features[$('#gakk').val()].geometry.coordinates[0];
+     var frame = document.getElementById("frm");
+     frame.src='https://maps.gsi.go.jp/?hc=hifc#18/'+lat+'/'+lot+'/&base=std&ls=std&disp=1&vs=c1j1h0k0l0u0t0z0r0s0m0f1';
+     document.getElementById('attmenu').style.visibility="hidden";
+   }
+  </script>
+ </body>
+</html>
