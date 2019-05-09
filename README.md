@@ -1,2 +1,2 @@
 # GIS-Group
-tankenMap
+たんけんMAP
